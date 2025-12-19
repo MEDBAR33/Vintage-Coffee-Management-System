@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Old Time Coffee - Management System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">☕ Old Time Coffee</h1>
+                <p class="tagline">Management System</p>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="menu">Menu Management</button>
+            <button class="tab-btn" data-tab="orders">Orders</button>
+            <button class="tab-btn" data-tab="new-order">New Order</button>
+            <button class="tab-btn" data-tab="invoices">Invoices</button>
+        </nav>
+
+        <!-- Menu Management Tab -->
+        <section id="menu" class="tab-content active">
+            <h2 class="section-title">Menu Management</h2>
+            
+            <div class="menu-sections">
+                <!-- Coffee Section -->
+                <div class="menu-section">
+                    <h3 class="menu-category">☕ Coffee</h3>
+                    <div id="coffee-items" class="menu-grid"></div>
+                </div>
+
+                <!-- Snacks Section -->
+                <div class="menu-section">
+                    <h3 class="menu-category">🥐 Snacks</h3>
+                    <div id="snack-items" class="menu-grid"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Orders Tab -->
+        <section id="orders" class="tab-content">
+            <h2 class="section-title">Orders</h2>
+            <div id="orders-list" class="orders-container"></div>
+        </section>
+
+        <!-- New Order Tab -->
+        <section id="new-order" class="tab-content">
+            <h2 class="section-title">Create New Order</h2>
+            <div class="order-form-container">
+                <div class="form-group">
+                    <label for="customer-name">Customer Name:</label>
+                    <input type="text" id="customer-name" placeholder="Enter customer name (optional)">
+                </div>
+                
+                <div class="order-items-section">
+                    <h3>Select Items</h3>
+                    <div class="available-items-grid" id="available-items"></div>
+                </div>
+
+                <div class="selected-items-section">
+                    <h3>Selected Items</h3>
+                    <div id="selected-items" class="selected-items-list"></div>
+                    <div class="order-total">
+                        <strong>Total: $<span id="order-total">0.00</span></strong>
+                    </div>
+                    <button id="submit-order" class="btn btn-primary">Submit Order</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Invoices Tab -->
+        <section id="invoices" class="tab-content">
+            <h2 class="section-title">Invoices</h2>
+            <div id="invoices-list" class="invoices-container"></div>
+        </section>
+    </div>
+
+    <!-- Invoice Modal -->
+    <div id="invoice-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="invoice-details"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
