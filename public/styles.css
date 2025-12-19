@@ -1,15 +1,14 @@
 /* Vintage Coffee Shop Management System - Styles */
 
 :root {
-    --primary-brown: #6B4423;
-    --secondary-brown: #8B5A3C;
-    --light-cream: #F5E6D3;
-    --dark-cream: #E8D5B7;
-    --accent-gold: #D4AF37;
-    --text-dark: #3E2723;
-    --text-light: #5D4037;
-    --paper: #F9F5F0;
-    --border-vintage: #B8860B;
+    --vintage-brown: #6B4423;
+    --vintage-cream: #F5E6D3;
+    --vintage-gold: #D4AF37;
+    --vintage-burgundy: #800020;
+    --vintage-beige: #E8DCC6;
+    --vintage-dark: #3D2817;
+    --vintage-light: #FFF8F0;
+    --shadow-vintage: rgba(107, 68, 35, 0.3);
 }
 
 * {
@@ -20,8 +19,8 @@
 
 body {
     font-family: 'Lora', serif;
-    background: linear-gradient(135deg, var(--light-cream) 0%, var(--dark-cream) 100%);
-    color: var(--text-dark);
+    background: linear-gradient(135deg, var(--vintage-cream) 0%, var(--vintage-beige) 100%);
+    color: var(--vintage-dark);
     min-height: 100vh;
     position: relative;
     overflow-x: hidden;
@@ -51,11 +50,11 @@ body::before {
 
 /* Header */
 .header {
-    background: linear-gradient(135deg, var(--primary-brown) 0%, var(--secondary-brown) 100%);
+    background: linear-gradient(135deg, var(--vintage-brown) 0%, var(--vintage-burgundy) 100%);
     padding: 40px 20px;
     border-radius: 15px;
     margin-bottom: 30px;
-    box-shadow: 0 10px 30px rgba(107, 68, 35, 0.3);
+    box-shadow: 0 10px 30px var(--shadow-vintage);
     position: relative;
     overflow: hidden;
     animation: fadeInDown 0.8s ease-out;
@@ -87,7 +86,7 @@ body::before {
 .logo {
     font-family: 'Playfair Display', serif;
     font-size: 3.5rem;
-    color: var(--accent-gold);
+    color: var(--vintage-gold);
     text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
     margin-bottom: 10px;
     animation: shimmer 3s ease-in-out infinite;
@@ -95,7 +94,7 @@ body::before {
 
 .tagline {
     font-size: 1.2rem;
-    color: var(--light-cream);
+    color: var(--vintage-cream);
     font-style: italic;
     letter-spacing: 2px;
 }
@@ -113,12 +112,12 @@ body::before {
     flex: 1;
     min-width: 150px;
     padding: 15px 25px;
-    background: var(--paper);
-    border: 2px solid var(--border-vintage);
+    background: var(--vintage-light);
+    border: 2px solid var(--vintage-gold);
     border-radius: 8px;
     font-family: 'Lora', serif;
     font-size: 1rem;
-    color: var(--text-dark);
+    color: var(--vintage-dark);
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
@@ -133,7 +132,7 @@ body::before {
     width: 0;
     height: 0;
     border-radius: 50%;
-    background: var(--accent-gold);
+    background: var(--vintage-gold);
     transform: translate(-50%, -50%);
     transition: width 0.6s, height 0.6s;
 }
@@ -146,14 +145,14 @@ body::before {
 .tab-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(107, 68, 35, 0.2);
-    border-color: var(--accent-gold);
+    border-color: var(--vintage-gold);
 }
 
 .tab-btn.active {
-    background: linear-gradient(135deg, var(--primary-brown) 0%, var(--secondary-brown) 100%);
-    color: var(--light-cream);
-    border-color: var(--accent-gold);
-    box-shadow: 0 5px 20px rgba(107, 68, 35, 0.4);
+    background: linear-gradient(135deg, var(--vintage-brown) 0%, var(--vintage-burgundy) 100%);
+    color: var(--vintage-cream);
+    border-color: var(--vintage-gold);
+    box-shadow: 0 5px 20px var(--shadow-vintage);
 }
 
 .tab-btn span {
@@ -174,7 +173,7 @@ body::before {
 .section-title {
     font-family: 'Playfair Display', serif;
     font-size: 2.5rem;
-    color: var(--primary-brown);
+    color: var(--vintage-brown);
     margin-bottom: 30px;
     text-align: center;
     position: relative;
@@ -189,7 +188,7 @@ body::before {
     transform: translateX(-50%);
     width: 100px;
     height: 3px;
-    background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+    background: linear-gradient(90deg, transparent, var(--vintage-gold), transparent);
     animation: expandLine 1s ease-out;
 }
 
@@ -201,18 +200,18 @@ body::before {
 }
 
 .menu-section {
-    background: var(--paper);
+    background: var(--vintage-light);
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 5px 20px rgba(107, 68, 35, 0.15);
-    border: 2px solid var(--border-vintage);
+    border: 2px solid var(--vintage-gold);
     animation: slideInLeft 0.6s ease-out;
 }
 
 .menu-category {
     font-family: 'Playfair Display', serif;
     font-size: 2rem;
-    color: var(--primary-brown);
+    color: var(--vintage-brown);
     margin-bottom: 20px;
     text-align: center;
 }
@@ -225,7 +224,7 @@ body::before {
 
 .menu-item-card {
     background: white;
-    border: 2px solid var(--dark-cream);
+    border: 2px solid var(--vintage-beige);
     border-radius: 10px;
     padding: 20px;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -251,8 +250,8 @@ body::before {
 
 .menu-item-card:hover {
     transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 10px 30px rgba(107, 68, 35, 0.2);
-    border-color: var(--accent-gold);
+    box-shadow: 0 10px 30px var(--shadow-vintage);
+    border-color: var(--vintage-gold);
 }
 
 .menu-item-card.unavailable {
@@ -263,22 +262,22 @@ body::before {
 .menu-item-name {
     font-family: 'Playfair Display', serif;
     font-size: 1.4rem;
-    color: var(--text-dark);
+    color: var(--vintage-dark);
     margin-bottom: 10px;
 }
 
 .menu-item-price {
     font-size: 1.2rem;
-    color: var(--primary-brown);
+    color: var(--vintage-brown);
     font-weight: 600;
     margin-bottom: 15px;
 }
 
 .menu-item-toggle {
     padding: 8px 20px;
-    border: 2px solid var(--primary-brown);
+    border: 2px solid var(--vintage-brown);
     background: white;
-    color: var(--primary-brown);
+    color: var(--vintage-brown);
     border-radius: 5px;
     cursor: pointer;
     font-family: 'Lora', serif;
@@ -287,7 +286,7 @@ body::before {
 }
 
 .menu-item-toggle:hover {
-    background: var(--primary-brown);
+    background: var(--vintage-brown);
     color: white;
     transform: scale(1.05);
 }
@@ -306,8 +305,8 @@ body::before {
 }
 
 .order-card {
-    background: var(--paper);
-    border: 2px solid var(--border-vintage);
+    background: var(--vintage-light);
+    border: 2px solid var(--vintage-gold);
     border-radius: 12px;
     padding: 25px;
     box-shadow: 0 5px 15px rgba(107, 68, 35, 0.15);
@@ -317,7 +316,7 @@ body::before {
 
 .order-card:hover {
     transform: translateX(5px);
-    box-shadow: 0 8px 25px rgba(107, 68, 35, 0.25);
+    box-shadow: 0 8px 25px var(--shadow-vintage);
 }
 
 .order-header {
@@ -331,7 +330,7 @@ body::before {
 
 .order-id {
     font-weight: 600;
-    color: var(--primary-brown);
+    color: var(--vintage-brown);
     font-size: 1.1rem;
 }
 
@@ -359,7 +358,7 @@ body::before {
 }
 
 .order-customer {
-    color: var(--text-light);
+    color: var(--vintage-dark);
     margin-bottom: 10px;
 }
 
@@ -372,16 +371,16 @@ body::before {
     display: flex;
     justify-content: space-between;
     margin-bottom: 8px;
-    color: var(--text-dark);
+    color: var(--vintage-dark);
 }
 
 .order-total-section {
     font-size: 1.2rem;
     font-weight: 600;
-    color: var(--primary-brown);
+    color: var(--vintage-brown);
     margin-top: 15px;
     padding-top: 15px;
-    border-top: 2px solid var(--dark-cream);
+    border-top: 2px solid var(--vintage-beige);
 }
 
 .order-actions {
@@ -422,19 +421,19 @@ body::before {
 }
 
 .btn-primary {
-    background: var(--primary-brown);
+    background: var(--vintage-brown);
     color: white;
 }
 
 .btn-primary:hover {
-    background: var(--secondary-brown);
+    background: var(--vintage-burgundy);
     transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(107, 68, 35, 0.3);
+    box-shadow: 0 5px 15px var(--shadow-vintage);
 }
 
 .btn-secondary {
-    background: var(--accent-gold);
-    color: var(--text-dark);
+    background: var(--vintage-gold);
+    color: var(--vintage-dark);
 }
 
 .btn-secondary:hover {
@@ -449,11 +448,11 @@ body::before {
 
 /* New Order Form */
 .order-form-container {
-    background: var(--paper);
+    background: var(--vintage-light);
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 5px 20px rgba(107, 68, 35, 0.15);
-    border: 2px solid var(--border-vintage);
+    border: 2px solid var(--vintage-gold);
 }
 
 .form-group {
@@ -463,7 +462,7 @@ body::before {
 .form-group label {
     display: block;
     font-weight: 600;
-    color: var(--text-dark);
+    color: var(--vintage-dark);
     margin-bottom: 8px;
     font-size: 1.1rem;
 }
@@ -471,7 +470,7 @@ body::before {
 .form-group input {
     width: 100%;
     padding: 12px;
-    border: 2px solid var(--dark-cream);
+    border: 2px solid var(--vintage-beige);
     border-radius: 5px;
     font-family: 'Lora', serif;
     font-size: 1rem;
@@ -480,8 +479,8 @@ body::before {
 
 .form-group input:focus {
     outline: none;
-    border-color: var(--accent-gold);
-    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+    border-color: var(--vintage-gold);
+    box-shadow: 0 0 10px var(--shadow-vintage);
 }
 
 .available-items-grid {
@@ -493,7 +492,7 @@ body::before {
 
 .available-item {
     background: white;
-    border: 2px solid var(--dark-cream);
+    border: 2px solid var(--vintage-beige);
     border-radius: 8px;
     padding: 15px;
     cursor: pointer;
@@ -504,23 +503,23 @@ body::before {
 .available-item:hover {
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(107, 68, 35, 0.2);
-    border-color: var(--accent-gold);
+    border-color: var(--vintage-gold);
 }
 
 .available-item-name {
     font-weight: 600;
-    color: var(--text-dark);
+    color: var(--vintage-dark);
     margin-bottom: 5px;
 }
 
 .available-item-price {
-    color: var(--primary-brown);
+    color: var(--vintage-brown);
     font-size: 1.1rem;
 }
 
 .selected-items-list {
     background: white;
-    border: 2px solid var(--dark-cream);
+    border: 2px solid var(--vintage-beige);
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 20px;
@@ -533,7 +532,7 @@ body::before {
     align-items: center;
     padding: 10px;
     margin-bottom: 10px;
-    background: var(--light-cream);
+    background: var(--vintage-cream);
     border-radius: 5px;
     animation: fadeInScale 0.3s ease-out;
 }
@@ -553,9 +552,9 @@ body::before {
 .quantity-btn {
     width: 30px;
     height: 30px;
-    border: 2px solid var(--primary-brown);
+    border: 2px solid var(--vintage-brown);
     background: white;
-    color: var(--primary-brown);
+    color: var(--vintage-brown);
     border-radius: 5px;
     cursor: pointer;
     font-size: 1.2rem;
@@ -563,7 +562,7 @@ body::before {
 }
 
 .quantity-btn:hover {
-    background: var(--primary-brown);
+    background: var(--vintage-brown);
     color: white;
 }
 
@@ -593,7 +592,7 @@ body::before {
     font-size: 1.5rem;
     text-align: right;
     margin-bottom: 20px;
-    color: var(--primary-brown);
+    color: var(--vintage-brown);
 }
 
 /* Invoices */
@@ -604,8 +603,8 @@ body::before {
 }
 
 .invoice-card {
-    background: var(--paper);
-    border: 2px solid var(--border-vintage);
+    background: var(--vintage-light);
+    border: 2px solid var(--vintage-gold);
     border-radius: 12px;
     padding: 25px;
     box-shadow: 0 5px 15px rgba(107, 68, 35, 0.15);
@@ -616,7 +615,7 @@ body::before {
 
 .invoice-card:hover {
     transform: translateX(5px);
-    box-shadow: 0 8px 25px rgba(107, 68, 35, 0.25);
+    box-shadow: 0 8px 25px var(--shadow-vintage);
 }
 
 .invoice-header {
@@ -630,14 +629,14 @@ body::before {
 
 .invoice-number {
     font-weight: 600;
-    color: var(--primary-brown);
+    color: var(--vintage-brown);
     font-size: 1.2rem;
 }
 
 .invoice-total {
     font-size: 1.3rem;
     font-weight: 600;
-    color: var(--accent-gold);
+    color: var(--vintage-gold);
 }
 
 /* Modal */
@@ -654,10 +653,10 @@ body::before {
 }
 
 .modal-content {
-    background-color: var(--paper);
+    background-color: var(--vintage-light);
     margin: 5% auto;
     padding: 40px;
-    border: 3px solid var(--border-vintage);
+    border: 3px solid var(--vintage-gold);
     border-radius: 15px;
     width: 90%;
     max-width: 600px;
@@ -669,7 +668,7 @@ body::before {
 }
 
 .close {
-    color: var(--text-dark);
+    color: var(--vintage-dark);
     float: right;
     font-size: 28px;
     font-weight: bold;
@@ -681,7 +680,7 @@ body::before {
 }
 
 .close:hover {
-    color: var(--primary-brown);
+    color: var(--vintage-brown);
     transform: scale(1.2) rotate(90deg);
 }
 
@@ -691,14 +690,14 @@ body::before {
 
 .invoice-details h2 {
     font-family: 'Playfair Display', serif;
-    color: var(--primary-brown);
+    color: var(--vintage-brown);
     margin-bottom: 20px;
 }
 
 .invoice-details-item {
     margin-bottom: 15px;
     padding-bottom: 15px;
-    border-bottom: 1px solid var(--dark-cream);
+    border-bottom: 1px solid var(--vintage-beige);
 }
 
 .invoice-details-item:last-child {
