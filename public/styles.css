@@ -707,6 +707,16 @@ body::before {
     border: 2px solid var(--element-maroon);
 }
 
+.order-items-section h3,
+.selected-items-section h3 {
+    font-family: 'Edwardian Script ITC', 'Vivaldi', 'Great Vibes', cursive;
+    font-size: 2rem;
+    color: var(--element-maroon);
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: normal;
+}
+
 .form-group {
     margin-bottom: 25px;
 }
@@ -1090,21 +1100,124 @@ body::before {
 }
 
 /* Responsive Design */
+
+/* Large tablets and small laptops (1024px and below) */
+@media (max-width: 1024px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .header {
+        padding: 35px 18px;
+    }
+    
+    .section-title {
+        font-size: 2.5rem;
+    }
+    
+    .menu-category {
+        font-size: 2rem;
+    }
+    
+    .menu-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+    
+    .available-items-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+}
+
+/* Touch-friendly improvements for mobile devices */
+@media (hover: none) and (pointer: coarse) {
+    .tab-btn,
+    .btn,
+    .menu-item-toggle,
+    .quantity-btn,
+    .remove-item,
+    .available-item {
+        min-height: 44px;
+        -webkit-tap-highlight-color: rgba(81, 4, 0, 0.2);
+    }
+    
+    .tab-btn:hover,
+    .btn:hover,
+    .menu-item-card:hover {
+        transform: none;
+    }
+    
+    .tab-btn:active,
+    .btn:active {
+        transform: scale(0.98);
+    }
+}
+
+/* Tablets (768px and below) */
 @media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .header {
+        padding: 30px 15px;
+        margin-bottom: 20px;
+    }
+    
     .logo {
         font-size: 2.5rem;
     }
     
+    .tagline {
+        font-size: 1rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+    
+    .menu-category {
+        font-size: 1.8rem;
+    }
+    
+    .menu-section {
+        padding: 20px;
+    }
+    
     .menu-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+    }
+    
+    .menu-item-image {
+        height: 150px;
+    }
+    
+    .menu-item-name {
+        font-size: 1.2rem;
+    }
+    
+    .menu-item-price {
+        font-size: 1.1rem;
     }
     
     .available-items-grid {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     }
     
+    .available-item-image {
+        height: 100px;
+    }
+    
+    .tabs {
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    
     .tab-btn {
         min-width: 100%;
+        padding: 12px 20px;
+        font-size: 0.9rem;
     }
     
     .tabs-group.staff-tabs {
@@ -1121,12 +1234,387 @@ body::before {
         width: 100%;
     }
     
+    .order-card,
+    .invoice-card {
+        padding: 20px;
+    }
+    
+    .order-header,
+    .invoice-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .order-actions {
+        flex-direction: column;
+    }
+    
+    .order-actions .btn {
+        width: 100%;
+    }
+    
+    .order-form-container {
+        padding: 20px;
+    }
+    
+    .selected-items-list {
+        padding: 15px;
+    }
+    
+    .selected-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .selected-item-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .order-total {
+        font-size: 1.5rem;
+        text-align: left;
+    }
+    
+    .modal-content {
+        width: 95%;
+        padding: 30px 20px;
+        margin: 10% auto;
+    }
+    
+    .contact-banner {
+        padding: 30px 15px;
+    }
+    
+    .contact-title {
+        font-size: 2rem;
+    }
+    
     .contact-info {
         flex-direction: column;
         gap: 20px;
     }
     
     .contact-item {
+        font-size: 1rem;
+    }
+    
+    .vintage-divider {
+        margin: 30px 0;
+        height: 40px;
+    }
+}
+
+/* Small phones (480px and below) */
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .header {
+        padding: 20px 10px;
+        margin-bottom: 15px;
+        border-radius: 10px;
+    }
+    
+    .logo {
+        font-size: 2rem;
+        margin-bottom: 5px;
+    }
+    
+    .tagline {
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+    }
+    
+    .section-title {
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+    }
+    
+    .section-title::after {
+        width: 60px;
+    }
+    
+    .menu-category {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+    }
+    
+    .menu-section {
+        padding: 15px;
+    }
+    
+    .menu-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .menu-item-card {
+        margin-bottom: 0;
+    }
+    
+    .menu-item-image {
+        height: 180px;
+    }
+    
+    .menu-item-info {
+        padding: 15px;
+    }
+    
+    .menu-item-name {
+        font-size: 1.1rem;
+    }
+    
+    .menu-item-price {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+    
+    .menu-item-toggle {
+        padding: 6px 15px;
+        font-size: 0.85rem;
+        width: 100%;
+    }
+    
+    .tabs {
+        gap: 8px;
+        margin-bottom: 15px;
+    }
+    
+    .tab-btn {
+        padding: 10px 15px;
+        font-size: 0.85rem;
+        min-width: 100%;
+    }
+    
+    .tabs-group {
+        gap: 8px;
+    }
+    
+    .available-items-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .available-item {
+        padding: 10px;
+    }
+    
+    .available-item-image {
+        height: 80px;
+    }
+    
+    .available-item-name {
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
+    
+    .available-item-price {
+        font-size: 1rem;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        font-size: 1.1rem;
+        margin-bottom: 6px;
+    }
+    
+    .form-group input {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+    
+    .order-items-section h3,
+    .selected-items-section h3 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+    }
+    
+    .order-card,
+    .invoice-card {
+        padding: 15px;
+    }
+    
+    .order-id,
+    .invoice-number {
+        font-size: 1.1rem;
+    }
+    
+    .order-status {
+        font-size: 0.8rem;
+        padding: 5px 12px;
+    }
+    
+    .order-customer {
+        font-size: 0.9rem;
+    }
+    
+    .order-items {
+        padding-left: 15px;
+    }
+    
+    .order-item {
+        font-size: 0.9rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .order-total-section {
+        font-size: 1.2rem;
+        margin-top: 10px;
+        padding-top: 10px;
+    }
+    
+    .order-total {
+        font-size: 1.3rem;
+    }
+    
+    .btn {
+        padding: 10px 18px;
+        font-size: 0.9rem;
+        width: 100%;
+    }
+    
+    .btn-small {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .selected-items-list {
+        padding: 12px;
+        min-height: 80px;
+    }
+    
+    .selected-item {
+        padding: 8px;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+    }
+    
+    .selected-item strong {
+        font-size: 0.95rem;
+    }
+    
+    .quantity-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 1rem;
+    }
+    
+    .quantity-display {
+        font-size: 0.9rem;
+    }
+    
+    .remove-item {
+        padding: 4px 8px;
+        font-size: 0.75rem;
+    }
+    
+    .invoice-total {
+        font-size: 1.3rem;
+    }
+    
+    .modal-content {
+        width: 95%;
+        padding: 20px 15px;
+        margin: 5% auto;
+        max-height: 90vh;
+    }
+    
+    .close {
+        font-size: 24px;
+        right: 15px;
+        top: 10px;
+    }
+    
+    .invoice-details h2 {
+        font-size: 1.5rem;
+    }
+    
+    .invoice-details-item {
+        font-size: 0.9rem;
+        margin-bottom: 12px;
+        padding-bottom: 12px;
+    }
+    
+    .contact-banner {
+        padding: 25px 10px;
+        margin-top: 40px;
+    }
+    
+    .contact-title {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+    }
+    
+    .contact-info {
+        gap: 15px;
+    }
+    
+    .contact-item {
+        font-size: 0.9rem;
+    }
+    
+    .contact-icon {
+        font-size: 1.2rem;
+    }
+    
+    .vintage-divider {
+        margin: 20px 0;
+        height: 30px;
+    }
+    
+    .vintage-divider::before,
+    .vintage-divider::after {
+        max-width: 100px;
+    }
+    
+    .vintage-divider::before {
+        margin-right: 15px;
+    }
+    
+    .vintage-divider::after {
+        margin-left: 15px;
+    }
+}
+
+/* Extra small phones (360px and below) */
+@media (max-width: 360px) {
+    .logo {
+        font-size: 1.8rem;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+    }
+    
+    .menu-category {
+        font-size: 1.3rem;
+    }
+    
+    .available-items-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .tab-btn {
+        font-size: 0.8rem;
+        padding: 8px 12px;
+    }
+    
+    .menu-item-name {
+        font-size: 1rem;
+    }
+    
+    .order-id,
+    .invoice-number {
         font-size: 1rem;
     }
 }

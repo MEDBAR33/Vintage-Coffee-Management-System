@@ -113,6 +113,62 @@ Vintage/
 3. **Manage Orders**: Update order status (pending → preparing → completed)
 4. **Generate Invoices**: Create invoices for completed orders and view them
 
+## Deployment to Render
+
+This application is configured to deploy easily to [Render](https://render.com):
+
+### Prerequisites
+- A GitHub account
+- Your code pushed to a GitHub repository
+
+### Steps to Deploy
+
+1. **Push your code to GitHub**
+   ```bash
+   git init
+   git add .
+   git commit -m "Initial commit"
+   git remote add origin <your-github-repo-url>
+   git push -u origin main
+   ```
+
+2. **Create a Render Account**
+   - Go to [render.com](https://render.com)
+   - Sign up for a free account (GitHub OAuth recommended)
+
+3. **Create a New Web Service**
+   - Click "New +" → "Web Service"
+   - Connect your GitHub repository
+   - Render will auto-detect the settings from `render.yaml`
+
+4. **Configure (if needed)**
+   - **Name**: vintage-coffee-management (or your preferred name)
+   - **Environment**: Node
+   - **Build Command**: `npm install`
+   - **Start Command**: `npm start`
+   - **Instance Type**: Free tier is sufficient
+
+5. **Deploy**
+   - Click "Create Web Service"
+   - Render will build and deploy your application
+   - Your app will be available at: `https://your-app-name.onrender.com`
+
+### Important Notes
+
+- **Data Persistence**: The free tier on Render uses ephemeral filesystems. Data (orders, invoices) will reset when the service restarts. For production, consider using Render's PostgreSQL or another database service.
+- **Cold Starts**: Free tier services spin down after 15 minutes of inactivity. First request after spin-down may take 30-60 seconds.
+- **Environment Variables**: The app automatically uses `PORT` provided by Render (no configuration needed).
+
+### Alternative: Using Render Dashboard (without render.yaml)
+
+If you prefer not to use `render.yaml`:
+1. Select your repository in Render
+2. Set:
+   - **Build Command**: `npm install`
+   - **Start Command**: `npm start`
+   - **Environment**: Node
+3. Deploy
+
 ## Design Features
 
 - Vintage color scheme with warm browns and cream tones

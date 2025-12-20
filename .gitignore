@@ -1,5 +1,7 @@
 node_modules/
-data/
-*.log
 .DS_Store
 .env
+*.log
+data/*.json
+!data/menu.json
+!data/inventory.json
