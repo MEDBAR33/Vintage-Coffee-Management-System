@@ -21,10 +21,14 @@
 
         <!-- Navigation Tabs -->
         <nav class="tabs">
-            <button class="tab-btn active" data-tab="menu">Menu Management</button>
-            <button class="tab-btn" data-tab="orders">Orders</button>
-            <button class="tab-btn" data-tab="new-order">New Order</button>
-            <button class="tab-btn" data-tab="invoices">Invoices</button>
+            <div class="tabs-group staff-tabs">
+                <button class="tab-btn staff-tab active" data-tab="menu">Menu Management</button>
+                <button class="tab-btn staff-tab" data-tab="orders">Orders</button>
+                <button class="tab-btn staff-tab" data-tab="invoices">Invoices</button>
+            </div>
+            <div class="tabs-group customer-tabs">
+                <button class="tab-btn customer-tab" data-tab="new-order">New Order</button>
+            </div>
         </nav>
 
         <!-- Menu Management Tab -->
@@ -115,6 +119,27 @@
             <div id="invoice-details"></div>
         </div>
     </div>
+
+    <!-- Contact Us Banner -->
+    <footer class="contact-banner">
+        <div class="contact-content">
+            <h3 class="contact-title">Contact Us</h3>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <span class="contact-icon">📞</span>
+                    <span>Phone: 13216557953</span>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-icon">✉️</span>
+                    <span>Email: info@oldtimecoffee.com</span>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-icon">📍</span>
+                    <span>123 Ancient Street Huzhou China</span>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <script src="script.js"></script>
 </body>

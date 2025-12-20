@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
     loadOrders();
     loadInvoices();
     setupEventListeners();
+    // Initialize selected items display
+    updateSelectedItemsDisplay();
 });
 
 // Tab Management
@@ -37,6 +39,7 @@ function initializeTabs() {
                 loadOrders();
             } else if (targetTab === 'new-order') {
                 loadAvailableItems();
+                updateSelectedItemsDisplay();
             } else if (targetTab === 'invoices') {
                 loadInvoices();
             } else if (targetTab === 'menu') {
@@ -134,7 +137,7 @@ function displayOrders() {
     container.innerHTML = '';
     
     if (currentOrders.length === 0) {
-        container.innerHTML = '<p style="text-align: center; color: var(--text-light);">No orders yet</p>';
+        container.innerHTML = '<p style="text-align: center; color: var(--element-maroon); font-family: \'Vivaldi\', \'Edwardian Script ITC\', \'Great Vibes\', cursive; font-size: 1.2rem; padding: 20px;">No orders yet</p>';
         return;
     }
     
@@ -159,7 +162,7 @@ function createOrderCard(order) {
             <div>
                 <div class="order-id">Order #${order.id.substring(0, 8)}</div>
                 <div class="order-customer">Customer: ${order.customerName}</div>
-                <div class="order-customer" style="font-size: 0.9rem; color: var(--text-light);">${date}</div>
+                <div class="order-customer" style="font-size: 0.9rem; color: rgba(107, 68, 35, 0.7);">${date}</div>
             </div>
             <div class="order-status ${order.status}">${order.status}</div>
         </div>
@@ -265,7 +268,7 @@ function updateSelectedItemsDisplay() {
     const totalElement = document.getElementById('order-total');
     
     if (selectedItems.length === 0) {
-        container.innerHTML = '<p style="text-align: center; color: var(--text-light); padding: 20px;">No items selected</p>';
+        container.innerHTML = '<p style="text-align: center; color: var(--vintage-cream); padding: 40px 20px; margin: 0; font-family: \'Vivaldi\', \'Edwardian Script ITC\', \'Great Vibes\', cursive; font-size: 1.2rem;">No selected items</p>';
         totalElement.textContent = '0.00';
         return;
     }
@@ -395,7 +398,7 @@ function displayInvoices() {
     container.innerHTML = '';
     
     if (currentInvoices.length === 0) {
-        container.innerHTML = '<p style="text-align: center; color: var(--text-light);">No invoices yet</p>';
+        container.innerHTML = '<p style="text-align: center; color: var(--element-maroon); font-family: \'Vivaldi\', \'Edwardian Script ITC\', \'Great Vibes\', cursive; font-size: 1.2rem; padding: 20px;">No invoices yet</p>';
         return;
     }
     
@@ -421,7 +424,7 @@ function createInvoiceCard(invoice) {
             <div>
                 <div class="invoice-number">${invoice.invoiceNumber}</div>
                 <div class="order-customer">${invoice.customerName}</div>
-                <div class="order-customer" style="font-size: 0.9rem; color: var(--text-light);">${date}</div>
+                <div class="order-customer" style="font-size: 0.9rem; color: rgba(107, 68, 35, 0.7);">${date}</div>
             </div>
             <div class="invoice-total">$${invoice.total.toFixed(2)}</div>
         </div>

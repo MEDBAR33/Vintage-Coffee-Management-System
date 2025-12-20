@@ -294,22 +294,40 @@ body::before {
 /* Navigation Tabs */
 .tabs {
     display: flex;
-    gap: 10px;
+    gap: 20px;
     margin-bottom: 30px;
     flex-wrap: wrap;
     animation: fadeInUp 0.8s ease-out 0.2s both;
+    align-items: center;
+}
+
+.tabs-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.tabs-group.staff-tabs {
+    flex: 1;
+    border-right: 2px solid var(--element-maroon);
+    padding-right: 20px;
+    margin-right: 10px;
+}
+
+.tabs-group.customer-tabs {
+    flex: 0 0 auto;
 }
 
 .tab-btn {
     flex: 1;
     min-width: 150px;
     padding: 15px 25px;
-    background: rgba(245, 230, 211, 0.6);
-    border: 2px solid var(--element-maroon);
+    background: rgba(128, 0, 32, 0.7);
+    border: 2px solid var(--vintage-cream);
     border-radius: 8px;
     font-family: 'Vivaldi', 'Edwardian Script ITC', 'Great Vibes', 'Parisienne', cursive;
     font-size: 1rem;
-    color: var(--element-maroon);
+    color: var(--vintage-cream);
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
@@ -317,36 +335,35 @@ body::before {
     font-weight: normal;
 }
 
-.tab-btn::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: var(--vintage-burgundy);
-    transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
-}
-
-.tab-btn:hover::before {
-    width: 300px;
-    height: 300px;
-}
-
 .tab-btn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 5px 15px var(--shadow-vintage);
-    border-color: var(--vintage-burgundy);
-    color: var(--vintage-burgundy);
 }
 
 .tab-btn.active {
-    background: linear-gradient(135deg, var(--element-maroon) 0%, var(--vintage-brown) 100%);
+    background: linear-gradient(to bottom, rgba(128, 0, 32, 0.6), rgba(81, 4, 0, 0.9));
     color: var(--vintage-cream);
-    border-color: var(--element-maroon);
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
+    border-color: var(--vintage-cream);
+    box-shadow: 0 5px 20px rgba(128, 0, 32, 0.3);
+}
+
+.tab-btn.staff-tab.active {
+    background: linear-gradient(to bottom, rgba(128, 0, 32, 0.6), rgba(81, 4, 0, 0.9));
+}
+
+.tab-btn.customer-tab.active {
+    background: linear-gradient(to bottom, rgba(128, 0, 32, 0.6), rgba(81, 4, 0, 0.9));
+}
+
+.tab-btn.staff-tab {
+    background: rgba(128, 0, 32, 0.7);
+    border: 2px solid var(--vintage-cream);
+    color: var(--vintage-cream);
+}
+
+.tab-btn.customer-tab {
+    background: rgba(128, 0, 32, 0.7);
+    border: 2px solid var(--vintage-cream);
+    color: var(--vintage-cream);
 }
 
 .tab-btn span {
@@ -1089,4 +1106,71 @@ body::before {
     .tab-btn {
         min-width: 100%;
     }
+    
+    .tabs-group.staff-tabs {
+        border-right: none;
+        border-bottom: 2px solid var(--element-maroon);
+        padding-right: 0;
+        padding-bottom: 15px;
+        margin-right: 0;
+        margin-bottom: 15px;
+        width: 100%;
+    }
+    
+    .tabs-group.customer-tabs {
+        width: 100%;
+    }
+    
+    .contact-info {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .contact-item {
+        font-size: 1rem;
+    }
+}
+
+/* Contact Us Banner */
+.contact-banner {
+    background: linear-gradient(135deg, var(--element-maroon) 0%, var(--vintage-brown) 100%);
+    padding: 40px 20px;
+    margin-top: 60px;
+    border-top: 3px solid var(--vintage-cream);
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.contact-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.contact-title {
+    font-family: 'Edwardian Script ITC', 'Vivaldi', 'Great Vibes', cursive;
+    font-size: 2.5rem;
+    color: var(--vintage-cream);
+    margin-bottom: 25px;
+    font-weight: normal;
+}
+
+.contact-info {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Vivaldi', 'Edwardian Script ITC', 'Great Vibes', cursive;
+    font-size: 1.2rem;
+    color: var(--vintage-cream);
+    font-weight: normal;
+}
+
+.contact-icon {
+    font-size: 1.5rem;
 }
