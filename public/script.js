@@ -79,12 +79,17 @@ function createMenuItemCard(item) {
     card.className = `menu-item-card ${!item.available ? 'unavailable' : ''}`;
     
     card.innerHTML = `
-        <div class="menu-item-name">${item.name}</div>
-        <div class="menu-item-price">$${item.price.toFixed(2)}</div>
-        <button class="menu-item-toggle ${item.available ? 'available' : ''}" 
-                onclick="toggleItemAvailability('${item.id}')">
-            ${item.available ? 'Available' : 'Unavailable'}
-        </button>
+        <div class="menu-item-image">
+            <img src="${item.image || 'https://via.placeholder.com/300x200?text=' + encodeURIComponent(item.name)}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/300x200/6B4423/F5E6D3?text=' + encodeURIComponent('${item.name}')">
+        </div>
+        <div class="menu-item-info">
+            <div class="menu-item-name">${item.name}</div>
+            <div class="menu-item-price">$${item.price.toFixed(2)}</div>
+            <button class="menu-item-toggle ${item.available ? 'available' : ''}" 
+                    onclick="toggleItemAvailability('${item.id}')">
+                ${item.available ? 'Available' : 'Unavailable'}
+            </button>
+        </div>
     `;
     
     return card;
@@ -227,6 +232,9 @@ function displayAvailableItems(menu) {
         const itemDiv = document.createElement('div');
         itemDiv.className = 'available-item';
         itemDiv.innerHTML = `
+            <div class="available-item-image">
+                <img src="${item.image || 'https://via.placeholder.com/200x150?text=' + encodeURIComponent(item.name)}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/200x150/6B4423/F5E6D3?text=' + encodeURIComponent('${item.name}')">
+            </div>
             <div class="available-item-name">${item.name}</div>
             <div class="available-item-price">$${item.price.toFixed(2)}</div>
         `;
