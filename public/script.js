@@ -1,6 +1,6 @@
 // Vintage Coffee Management System - JavaScript
 
-const API_BASE = 'http://localhost:3000/api';
+const API_BASE = `${window.location.origin}/api`;
 let currentMenu = { coffee: [], snacks: [] };
 let currentOrders = [];
 let currentInvoices = [];
