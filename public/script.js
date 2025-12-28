@@ -277,6 +277,8 @@ function initializeTabs() {
             // Refresh data when switching tabs
             if (targetTab === 'orders') {
                 loadOrders();
+            } else if (targetTab === 'my-orders') {
+                loadMyOrders();
             } else if (targetTab === 'new-order') {
                 loadAvailableItems();
                 updateSelectedItemsDisplay();
@@ -405,11 +407,50 @@ function displayOrders() {
     );
     
     sortedOrders.forEach(order => {
-        container.appendChild(createOrderCard(order));
+        container.appendChild(createOrderCard(order, false));
     });
 }
 
-function createOrderCard(order) {
+// Load customer's own orders
+async function loadMyOrders() {
+    if (!authToken) return;
+    
+    try {
+        const response = await fetch(`${API_BASE}/orders`, {
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+        const myOrders = await response.json();
+        displayMyOrders(myOrders);
+    } catch (error) {
+        console.error('Error loading my orders:', error);
+        showNotification('Error loading orders', 'error');
+    }
+}
+
+function displayMyOrders(orders) {
+    const container = document.getElementById('my-orders-list');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    if (orders.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: var(--element-maroon); font-family: \'Vivaldi\', \'Edwardian Script ITC\', \'Great Vibes\', cursive; font-size: 1.2rem; padding: 20px;">No orders yet. Place your first order!</p>';
+        return;
+    }
+    
+    // Sort orders by date (newest first)
+    const sortedOrders = [...orders].sort((a, b) => 
+        new Date(b.createdAt) - new Date(a.createdAt)
+    );
+    
+    sortedOrders.forEach(order => {
+        container.appendChild(createOrderCard(order, true));
+    });
+}
+
+function createOrderCard(order, isCustomerView = false) {
     const card = document.createElement('div');
     card.className = 'order-card';
     
@@ -419,7 +460,7 @@ function createOrderCard(order) {
         <div class="order-header">
             <div>
                 <div class="order-id">Order #${order.id.substring(0, 8)}</div>
-                <div class="order-customer">Customer: ${order.customerName}</div>
+                ${!isCustomerView ? `<div class="order-customer">Customer: ${order.customerName}</div>` : ''}
                 <div class="order-customer" style="font-size: 0.9rem; color: rgba(107, 68, 35, 0.7);">${date}</div>
             </div>
             <div class="order-status ${order.status}">${order.status}</div>
@@ -435,19 +476,21 @@ function createOrderCard(order) {
         <div class="order-total-section">
             Total: $${order.total.toFixed(2)}
         </div>
-        <div class="order-actions">
-            ${order.status !== 'completed' ? `
-                <button class="btn btn-primary btn-small" onclick="updateOrderStatus('${order.id}', 'preparing')">
-                    Mark Preparing
+        ${!isCustomerView ? `
+            <div class="order-actions">
+                ${order.status !== 'completed' ? `
+                    <button class="btn btn-primary btn-small" onclick="updateOrderStatus('${order.id}', 'preparing')">
+                        Mark Preparing
+                    </button>
+                    <button class="btn btn-primary btn-small" onclick="updateOrderStatus('${order.id}', 'completed')">
+                        Mark Completed
+                    </button>
+                ` : ''}
+                <button class="btn btn-secondary btn-small" onclick="generateInvoice('${order.id}')">
+                    Generate Invoice
                 </button>
-                <button class="btn btn-primary btn-small" onclick="updateOrderStatus('${order.id}', 'completed')">
-                    Mark Completed
-                </button>
-            ` : ''}
-            <button class="btn btn-secondary btn-small" onclick="generateInvoice('${order.id}')">
-                Generate Invoice
-            </button>
-        </div>
+            </div>
+        ` : ''}
     `;
     
     return card;
