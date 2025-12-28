@@ -19,15 +19,29 @@
             </div>
         </header>
 
+        <!-- User Info & Auth -->
+        <div class="user-auth-section">
+            <div id="user-info" class="user-info" style="display: none;">
+                <span id="user-name-display"></span>
+                <button id="logout-btn" class="btn btn-secondary btn-small">Logout</button>
+            </div>
+            <div id="auth-buttons" class="auth-buttons">
+                <button id="login-btn" class="btn btn-primary btn-small">Login</button>
+                <button id="signup-btn" class="btn btn-secondary btn-small">Sign Up</button>
+            </div>
+        </div>
+
         <!-- Navigation Tabs -->
-        <nav class="tabs">
-            <div class="tabs-group staff-tabs">
+        <nav class="tabs" id="main-tabs">
+            <div class="tabs-group staff-tabs" id="staff-tabs-group" style="display: none;">
                 <button class="tab-btn staff-tab active" data-tab="menu">Menu Management</button>
                 <button class="tab-btn staff-tab" data-tab="orders">Orders</button>
                 <button class="tab-btn staff-tab" data-tab="invoices">Invoices</button>
             </div>
-            <div class="tabs-group customer-tabs">
-                <button class="tab-btn customer-tab" data-tab="new-order">New Order</button>
+            <div class="tabs-group customer-tabs" id="customer-tabs-group" style="display: none;">
+                <button class="tab-btn customer-tab active" data-tab="new-order">New Order</button>
+                <button class="tab-btn customer-tab" data-tab="reviews">Reviews</button>
+                <button class="tab-btn customer-tab" data-tab="photos">Photos</button>
             </div>
         </nav>
 
@@ -94,7 +108,7 @@
                     <div class="order-total">
                         <strong>Total: $<span id="order-total">0.00</span></strong>
                     </div>
-                    <button id="submit-order" class="btn btn-primary">Submit Order</button>
+                    <button id="submit-order" class="btn btn-primary">Proceed to Payment</button>
                 </div>
             </div>
         </section>
@@ -110,6 +124,50 @@
             </div>
             <div id="invoices-list" class="invoices-container"></div>
         </section>
+
+        <!-- Reviews Tab (Customer) -->
+        <section id="reviews" class="tab-content">
+            <div class="vintage-divider divider-ornate">
+                <div class="divider-center"></div>
+            </div>
+            <h2 class="section-title">Customer Reviews</h2>
+            <div class="vintage-divider divider-wavy">
+                <div class="divider-center"></div>
+            </div>
+            <div class="reviews-container">
+                <div id="reviews-list" class="reviews-list"></div>
+                <div id="review-form-container" class="review-form-container">
+                    <h3>Leave a Review</h3>
+                    <div class="form-group">
+                        <label for="review-rating">Rating:</label>
+                        <select id="review-rating" class="form-select">
+                            <option value="5">5 - Excellent</option>
+                            <option value="4">4 - Very Good</option>
+                            <option value="3">3 - Good</option>
+                            <option value="2">2 - Fair</option>
+                            <option value="1">1 - Poor</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="review-comment">Comment:</label>
+                        <textarea id="review-comment" class="form-textarea" rows="4" placeholder="Share your experience..."></textarea>
+                    </div>
+                    <button id="submit-review" class="btn btn-primary">Submit Review</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Photos Tab (Customer) -->
+        <section id="photos" class="tab-content">
+            <div class="vintage-divider divider-scroll">
+                <div class="divider-center"></div>
+            </div>
+            <h2 class="section-title">Coffee Shop Photos</h2>
+            <div class="vintage-divider divider-diamond">
+                <div class="divider-center"></div>
+            </div>
+            <div id="photos-gallery" class="photos-gallery"></div>
+        </section>
     </div>
 
     <!-- Invoice Modal -->
@@ -117,6 +175,88 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <div id="invoice-details"></div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content auth-modal">
+            <span class="close" id="close-login">&times;</span>
+            <h2 class="section-title">Login</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email:</label>
+                    <input type="email" id="login-email" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password:</label>
+                    <input type="password" id="login-password" required placeholder="Enter your password">
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+                <p style="text-align: center; margin-top: 15px;">
+                    Don't have an account? <a href="#" id="switch-to-signup" style="color: var(--element-maroon);">Sign Up</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sign Up Modal -->
+    <div id="signup-modal" class="modal">
+        <div class="modal-content auth-modal">
+            <span class="close" id="close-signup">&times;</span>
+            <h2 class="section-title">Sign Up</h2>
+            <form id="signup-form">
+                <div class="form-group">
+                    <label for="signup-name">Name:</label>
+                    <input type="text" id="signup-name" required placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label for="signup-email">Email:</label>
+                    <input type="email" id="signup-email" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password:</label>
+                    <input type="password" id="signup-password" required placeholder="Create a password" minlength="6">
+                </div>
+                <button type="submit" class="btn btn-primary">Sign Up</button>
+                <p style="text-align: center; margin-top: 15px;">
+                    Already have an account? <a href="#" id="switch-to-login" style="color: var(--element-maroon);">Login</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="modal">
+        <div class="modal-content payment-modal">
+            <span class="close" id="close-payment">&times;</span>
+            <h2 class="section-title">Payment</h2>
+            <div id="payment-summary"></div>
+            <form id="payment-form">
+                <div class="form-group">
+                    <label for="payment-method">Payment Method:</label>
+                    <select id="payment-method" class="form-select" required>
+                        <option value="card">Credit/Debit Card</option>
+                        <option value="paypal">PayPal</option>
+                        <option value="cash">Cash on Delivery</option>
+                    </select>
+                </div>
+                <div id="card-details" style="display: none;">
+                    <div class="form-group">
+                        <label for="card-number">Card Number:</label>
+                        <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19">
+                    </div>
+                    <div class="form-group">
+                        <label for="card-expiry">Expiry Date:</label>
+                        <input type="text" id="card-expiry" placeholder="MM/YY" maxlength="5">
+                    </div>
+                    <div class="form-group">
+                        <label for="card-cvv">CVV:</label>
+                        <input type="text" id="card-cvv" placeholder="123" maxlength="4">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Complete Payment</button>
+            </form>
         </div>
     </div>
 

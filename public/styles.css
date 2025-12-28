@@ -1662,3 +1662,245 @@ body::before {
 .contact-icon {
     font-size: 1.5rem;
 }
+
+/* User Auth Section */
+.user-auth-section {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-family: 'Vivaldi', 'Edwardian Script ITC', 'Great Vibes', cursive;
+    font-size: 1.1rem;
+    color: var(--element-maroon);
+}
+
+#user-name-display {
+    font-weight: normal;
+}
+
+/* Auth Modals */
+.auth-modal {
+    max-width: 500px;
+}
+
+.auth-modal form {
+    margin-top: 20px;
+}
+
+.auth-modal a {
+    color: var(--element-maroon);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.auth-modal a:hover {
+    color: var(--vintage-brown);
+}
+
+/* Payment Modal */
+.payment-modal {
+    max-width: 600px;
+}
+
+.payment-order-summary {
+    background: rgba(245, 230, 211, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    border: 2px solid var(--element-maroon);
+}
+
+.payment-order-summary h3 {
+    font-family: 'Edwardian Script ITC', 'Vivaldi', 'Great Vibes', cursive;
+    font-size: 1.8rem;
+    color: var(--element-maroon);
+    margin-bottom: 15px;
+    font-weight: normal;
+}
+
+.order-items-summary {
+    margin-bottom: 15px;
+}
+
+.form-select,
+.form-textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--vintage-brown);
+    border-radius: 5px;
+    font-family: 'Vivaldi', 'Edwardian Script ITC', 'Great Vibes', 'Parisienne', cursive;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.form-select:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--vintage-burgundy);
+    box-shadow: 0 0 10px rgba(81, 4, 0, 0.3);
+}
+
+.form-textarea {
+    resize: vertical;
+}
+
+/* Reviews */
+.reviews-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.review-card {
+    background: rgba(128, 0, 32, 0.9);
+    border: 2px solid var(--element-maroon);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(81, 4, 0, 0.2);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.review-author {
+    font-family: 'Edwardian Script ITC', 'Vivaldi', 'Great Vibes', cursive;
+    font-size: 1.3rem;
+    color: var(--vintage-cream);
+    font-weight: normal;
+}
+
+.review-rating {
+    font-size: 1.2rem;
+    color: var(--vintage-gold);
+}
+
+.review-date {
+    font-size: 0.9rem;
+    color: var(--vintage-cream);
+    opacity: 0.8;
+}
+
+.review-comment {
+    color: var(--vintage-cream);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-top: 10px;
+}
+
+.review-form-container {
+    background: rgba(245, 230, 211, 0.5);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(81, 4, 0, 0.2);
+    border: 2px solid var(--element-maroon);
+}
+
+.review-form-container h3 {
+    font-family: 'Edwardian Script ITC', 'Vivaldi', 'Great Vibes', cursive;
+    font-size: 2rem;
+    color: var(--element-maroon);
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: normal;
+}
+
+/* Photos Gallery */
+.photos-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.photo-item {
+    background: rgba(128, 0, 32, 0.9);
+    border: 2px solid var(--element-maroon);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(81, 4, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.photo-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(81, 4, 0, 0.4);
+}
+
+.photo-item img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Responsive adjustments for new elements */
+@media (max-width: 768px) {
+    .user-auth-section {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .auth-buttons {
+        width: 100%;
+    }
+    
+    .auth-buttons .btn {
+        flex: 1;
+    }
+    
+    .review-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .photos-gallery {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+    
+    .photo-item img {
+        height: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .photos-gallery {
+        grid-template-columns: 1fr;
+    }
+    
+    .photo-item img {
+        height: 250px;
+    }
+    
+    .review-card {
+        padding: 15px;
+    }
+    
+    .review-form-container {
+        padding: 20px;
+    }
+}

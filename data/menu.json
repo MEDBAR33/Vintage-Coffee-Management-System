@@ -5,7 +5,7 @@
       "name": "Classic Espresso",
       "price": 3.5,
       "category": "coffee",
-      "available": true,
+      "available": false,
       "image": "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=400&h=300&fit=crop"
     },
     {

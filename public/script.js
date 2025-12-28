@@ -5,17 +5,254 @@ let currentMenu = { coffee: [], snacks: [] };
 let currentOrders = [];
 let currentInvoices = [];
 let selectedItems = [];
+let currentUser = null;
+let authToken = null;
+let pendingOrder = null; // Store order before payment
 
 // Initialize app
 document.addEventListener('DOMContentLoaded', () => {
-    initializeTabs();
-    loadMenu();
-    loadOrders();
-    loadInvoices();
+    checkAuthentication();
+    setupAuthEventListeners();
     setupEventListeners();
-    // Initialize selected items display
-    updateSelectedItemsDisplay();
 });
+
+// Authentication Functions
+function getAuthToken() {
+    return localStorage.getItem('authToken');
+}
+
+function setAuthToken(token) {
+    authToken = token;
+    if (token) {
+        localStorage.setItem('authToken', token);
+    } else {
+        localStorage.removeItem('authToken');
+    }
+}
+
+async function checkAuthentication() {
+    const token = getAuthToken();
+    if (!token) {
+        showLoginRequired();
+        return;
+    }
+    
+    try {
+        const response = await fetch(`${API_BASE}/auth/verify`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            currentUser = data.user;
+            authToken = token;
+            setupUIForUser();
+            initializeTabs();
+            loadInitialData();
+        } else {
+            setAuthToken(null);
+            showLoginRequired();
+        }
+    } catch (error) {
+        console.error('Auth check error:', error);
+        setAuthToken(null);
+        showLoginRequired();
+    }
+}
+
+function showLoginRequired() {
+    // Hide all tabs and show login prompt
+    document.getElementById('staff-tabs-group').style.display = 'none';
+    document.getElementById('customer-tabs-group').style.display = 'none';
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    document.getElementById('user-info').style.display = 'none';
+    document.getElementById('auth-buttons').style.display = 'flex';
+}
+
+function setupUIForUser() {
+    if (!currentUser) return;
+    
+    document.getElementById('auth-buttons').style.display = 'none';
+    document.getElementById('user-info').style.display = 'flex';
+    document.getElementById('user-name-display').textContent = `Welcome, ${currentUser.name}`;
+    
+    // Show appropriate tabs based on role
+    if (currentUser.role === 'staff') {
+        document.getElementById('staff-tabs-group').style.display = 'flex';
+        document.getElementById('customer-tabs-group').style.display = 'none';
+        // Activate first staff tab
+        const firstStaffTab = document.querySelector('.staff-tab');
+        if (firstStaffTab) {
+            firstStaffTab.click();
+        }
+    } else {
+        document.getElementById('staff-tabs-group').style.display = 'none';
+        document.getElementById('customer-tabs-group').style.display = 'flex';
+        // Activate first customer tab
+        const firstCustomerTab = document.querySelector('.customer-tab');
+        if (firstCustomerTab) {
+            firstCustomerTab.click();
+        }
+    }
+}
+
+async function login(email, password) {
+    try {
+        const response = await fetch(`${API_BASE}/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            setAuthToken(data.token);
+            currentUser = data.user;
+            setupUIForUser();
+            initializeTabs();
+            loadInitialData();
+            closeModal('login-modal');
+            showNotification('Login successful!', 'success');
+            return true;
+        } else {
+            showNotification(data.error || 'Login failed', 'error');
+            return false;
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        showNotification('Login failed. Please try again.', 'error');
+        return false;
+    }
+}
+
+async function signup(name, email, password) {
+    try {
+        const response = await fetch(`${API_BASE}/auth/signup`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, password })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            setAuthToken(data.token);
+            currentUser = data.user;
+            setupUIForUser();
+            initializeTabs();
+            loadInitialData();
+            closeModal('signup-modal');
+            showNotification('Account created successfully!', 'success');
+            return true;
+        } else {
+            showNotification(data.error || 'Signup failed', 'error');
+            return false;
+        }
+    } catch (error) {
+        console.error('Signup error:', error);
+        showNotification('Signup failed. Please try again.', 'error');
+        return false;
+    }
+}
+
+function logout() {
+    setAuthToken(null);
+    currentUser = null;
+    selectedItems = [];
+    showLoginRequired();
+    showNotification('Logged out successfully', 'success');
+}
+
+function setupAuthEventListeners() {
+    // Login button
+    document.getElementById('login-btn').addEventListener('click', () => {
+        openModal('login-modal');
+    });
+    
+    // Signup button
+    document.getElementById('signup-btn').addEventListener('click', () => {
+        openModal('signup-modal');
+    });
+    
+    // Logout button
+    document.getElementById('logout-btn').addEventListener('click', logout);
+    
+    // Login form
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        await login(email, password);
+    });
+    
+    // Signup form
+    document.getElementById('signup-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('signup-name').value;
+        const email = document.getElementById('signup-email').value;
+        const password = document.getElementById('signup-password').value;
+        await signup(name, email, password);
+    });
+    
+    // Switch between login and signup
+    document.getElementById('switch-to-signup').addEventListener('click', (e) => {
+        e.preventDefault();
+        closeModal('login-modal');
+        openModal('signup-modal');
+    });
+    
+    document.getElementById('switch-to-login').addEventListener('click', (e) => {
+        e.preventDefault();
+        closeModal('signup-modal');
+        openModal('login-modal');
+    });
+    
+    // Close modals
+    document.getElementById('close-login').addEventListener('click', () => closeModal('login-modal'));
+    document.getElementById('close-signup').addEventListener('click', () => closeModal('signup-modal'));
+    document.getElementById('close-payment').addEventListener('click', () => closeModal('payment-modal'));
+    
+    // Payment method change
+    document.getElementById('payment-method').addEventListener('change', (e) => {
+        const cardDetails = document.getElementById('card-details');
+        cardDetails.style.display = e.target.value === 'card' ? 'block' : 'none';
+    });
+    
+    // Payment form
+    document.getElementById('payment-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await processPayment();
+    });
+}
+
+function openModal(modalId) {
+    document.getElementById(modalId).style.display = 'block';
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+function loadInitialData() {
+    loadMenu();
+    if (currentUser) {
+        loadOrders();
+        loadInvoices();
+        if (currentUser.role === 'customer') {
+            loadReviews();
+            loadPhotos();
+        }
+    }
+    updateSelectedItemsDisplay();
+}
 
 // Tab Management
 function initializeTabs() {
@@ -32,7 +269,10 @@ function initializeTabs() {
             
             // Add active class to clicked tab and corresponding content
             btn.classList.add('active');
-            document.getElementById(targetTab).classList.add('active');
+            const targetContent = document.getElementById(targetTab);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
             
             // Refresh data when switching tabs
             if (targetTab === 'orders') {
@@ -44,6 +284,10 @@ function initializeTabs() {
                 loadInvoices();
             } else if (targetTab === 'menu') {
                 loadMenu();
+            } else if (targetTab === 'reviews') {
+                loadReviews();
+            } else if (targetTab === 'photos') {
+                loadPhotos();
             }
         });
     });
@@ -99,13 +343,21 @@ function createMenuItemCard(item) {
 }
 
 async function toggleItemAvailability(itemId) {
+    if (!authToken || currentUser?.role !== 'staff') {
+        showNotification('Staff access required', 'error');
+        return;
+    }
+    
     try {
         const item = [...currentMenu.coffee, ...currentMenu.snacks].find(i => i.id === itemId);
         if (!item) return;
         
         const response = await fetch(`${API_BASE}/menu/${itemId}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+            },
             body: JSON.stringify({ available: !item.available })
         });
         
@@ -122,8 +374,14 @@ async function toggleItemAvailability(itemId) {
 
 // Load Orders
 async function loadOrders() {
+    if (!authToken) return;
+    
     try {
-        const response = await fetch(`${API_BASE}/orders`);
+        const response = await fetch(`${API_BASE}/orders`, {
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
         currentOrders = await response.json();
         displayOrders();
     } catch (error) {
@@ -196,10 +454,18 @@ function createOrderCard(order) {
 }
 
 async function updateOrderStatus(orderId, status) {
+    if (!authToken || currentUser?.role !== 'staff') {
+        showNotification('Staff access required', 'error');
+        return;
+    }
+    
     try {
         const response = await fetch(`${API_BASE}/orders/${orderId}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+            },
             body: JSON.stringify({ status })
         });
         
@@ -319,17 +585,26 @@ function removeItem(itemId) {
 }
 
 async function submitOrder() {
+    if (!currentUser) {
+        showNotification('Please login to place an order', 'error');
+        openModal('login-modal');
+        return;
+    }
+    
     if (selectedItems.length === 0) {
         showNotification('Please select at least one item', 'error');
         return;
     }
     
-    const customerName = document.getElementById('customer-name').value.trim() || 'Walk-in Customer';
+    const customerName = document.getElementById('customer-name').value.trim() || currentUser.name;
     
     try {
         const response = await fetch(`${API_BASE}/orders`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+            },
             body: JSON.stringify({
                 customerName,
                 items: selectedItems.map(item => ({
@@ -341,13 +616,9 @@ async function submitOrder() {
         
         if (response.ok) {
             const order = await response.json();
-            showNotification('Order created successfully!', 'success');
-            selectedItems = [];
-            document.getElementById('customer-name').value = '';
-            updateSelectedItemsDisplay();
-            
-            // Switch to orders tab
-            document.querySelector('[data-tab="orders"]').click();
+            pendingOrder = order;
+            // Open payment modal instead of completing order
+            showPaymentModal(order);
         } else {
             const error = await response.json();
             showNotification(error.error || 'Error creating order', 'error');
@@ -359,10 +630,18 @@ async function submitOrder() {
 }
 
 async function generateInvoice(orderId) {
+    if (!authToken || currentUser?.role !== 'staff') {
+        showNotification('Staff access required', 'error');
+        return;
+    }
+    
     try {
         const response = await fetch(`${API_BASE}/invoices`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+            },
             body: JSON.stringify({ orderId })
         });
         
@@ -383,8 +662,14 @@ async function generateInvoice(orderId) {
 
 // Load Invoices
 async function loadInvoices() {
+    if (!authToken) return;
+    
     try {
-        const response = await fetch(`${API_BASE}/invoices`);
+        const response = await fetch(`${API_BASE}/invoices`, {
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
         currentInvoices = await response.json();
         displayInvoices();
     } catch (error) {
@@ -473,6 +758,133 @@ function showInvoiceModal(invoice) {
     `;
     
     modal.style.display = 'block';
+}
+
+// Payment Functions
+function showPaymentModal(order) {
+    const paymentSummary = document.getElementById('payment-summary');
+    paymentSummary.innerHTML = `
+        <div class="payment-order-summary">
+            <h3>Order Summary</h3>
+            <div class="order-items-summary">
+                ${order.items.map(item => `
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span>${item.name} x ${item.quantity}</span>
+                        <span>$${(item.subtotal).toFixed(2)}</span>
+                    </div>
+                `).join('')}
+            </div>
+            <div style="border-top: 2px solid var(--element-maroon); margin-top: 15px; padding-top: 15px;">
+                <div style="display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: bold;">
+                    <span>Total:</span>
+                    <span>$${order.total.toFixed(2)}</span>
+                </div>
+            </div>
+        </div>
+    `;
+    openModal('payment-modal');
+}
+
+async function processPayment() {
+    if (!pendingOrder) {
+        showNotification('No pending order found', 'error');
+        return;
+    }
+    
+    const paymentMethod = document.getElementById('payment-method').value;
+    
+    try {
+        const response = await fetch(`${API_BASE}/payments/process`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+            },
+            body: JSON.stringify({
+                orderId: pendingOrder.id,
+                amount: pendingOrder.total,
+                paymentMethod: paymentMethod
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            closeModal('payment-modal');
+            // Show under construction message
+            showNotification('Payment processed successfully! However, the coffee shop is still under construction. We will notify you when your order is ready.', 'success');
+            
+            // Clear order form
+            selectedItems = [];
+            document.getElementById('customer-name').value = '';
+            updateSelectedItemsDisplay();
+            pendingOrder = null;
+            
+            // Reload orders
+            loadOrders();
+        } else {
+            showNotification(data.error || 'Payment failed', 'error');
+        }
+    } catch (error) {
+        console.error('Payment error:', error);
+        showNotification('Payment processing failed. Please try again.', 'error');
+    }
+}
+
+// Reviews Functions
+async function loadReviews() {
+    try {
+        const response = await fetch(`${API_BASE}/reviews`);
+        const reviews = await response.json();
+        displayReviews(reviews);
+    } catch (error) {
+        console.error('Error loading reviews:', error);
+    }
+}
+
+function displayReviews(reviews) {
+    const container = document.getElementById('reviews-list');
+    if (!container) return;
+    
+    if (reviews.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: var(--element-maroon); padding: 40px 20px;">No reviews yet. Be the first to leave one!</p>';
+        return;
+    }
+    
+    container.innerHTML = reviews.map(review => `
+        <div class="review-card">
+            <div class="review-header">
+                <div class="review-author">${review.userName}</div>
+                <div class="review-rating">
+                    ${'⭐'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}
+                </div>
+                <div class="review-date">${new Date(review.createdAt).toLocaleDateString()}</div>
+            </div>
+            ${review.comment ? `<div class="review-comment">${review.comment}</div>` : ''}
+        </div>
+    `).join('');
+}
+
+// Photos Functions
+function loadPhotos() {
+    const container = document.getElementById('photos-gallery');
+    if (!container) return;
+    
+    // Vintage coffee shop photos (placeholder URLs - you can replace with actual photos)
+    const photos = [
+        'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=600&fit=crop',
+        'https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=800&h=600&fit=crop',
+        'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&h=600&fit=crop',
+        'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800&h=600&fit=crop',
+        'https://images.unsplash.com/photo-1511920170033-f8396924c348?w=800&h=600&fit=crop',
+        'https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=800&h=600&fit=crop'
+    ];
+    
+    container.innerHTML = photos.map((photo, index) => `
+        <div class="photo-item">
+            <img src="${photo}" alt="Coffee Shop Photo ${index + 1}" loading="lazy">
+        </div>
+    `).join('');
 }
 
 // Setup Event Listeners
