@@ -894,7 +894,12 @@ function displayReviews(reviews) {
         return;
     }
     
-    container.innerHTML = reviews.map(review => `
+    // Sort reviews by date (newest first)
+    const sortedReviews = [...reviews].sort((a, b) => 
+        new Date(b.createdAt) - new Date(a.createdAt)
+    );
+    
+    container.innerHTML = sortedReviews.map(review => `
         <div class="review-card">
             <div class="review-header">
                 <div class="review-author">${review.userName}</div>
@@ -906,6 +911,54 @@ function displayReviews(reviews) {
             ${review.comment ? `<div class="review-comment">${review.comment}</div>` : ''}
         </div>
     `).join('');
+}
+
+// Submit review
+async function submitReview() {
+    if (!authToken) {
+        showNotification('Please login to submit a review', 'error');
+        return;
+    }
+    
+    if (currentUser?.role === 'staff') {
+        showNotification('Only customers can leave reviews', 'error');
+        return;
+    }
+    
+    const rating = parseInt(document.getElementById('review-rating').value);
+    const comment = document.getElementById('review-comment').value.trim();
+    
+    if (!rating || rating < 1 || rating > 5) {
+        showNotification('Please select a valid rating', 'error');
+        return;
+    }
+    
+    try {
+        const response = await fetch(`${API_BASE}/reviews`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+            },
+            body: JSON.stringify({ rating, comment })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            showNotification('Review submitted successfully!', 'success');
+            // Clear the form
+            document.getElementById('review-rating').value = '5';
+            document.getElementById('review-comment').value = '';
+            // Reload reviews to show the new one
+            loadReviews();
+        } else {
+            showNotification(data.error || 'Failed to submit review', 'error');
+        }
+    } catch (error) {
+        console.error('Error submitting review:', error);
+        showNotification('Error submitting review. Please try again.', 'error');
+    }
 }
 
 // Photos Functions
@@ -934,6 +987,12 @@ function loadPhotos() {
 function setupEventListeners() {
     // Submit order button
     document.getElementById('submit-order').addEventListener('click', submitOrder);
+    
+    // Submit review button
+    const submitReviewBtn = document.getElementById('submit-review');
+    if (submitReviewBtn) {
+        submitReviewBtn.addEventListener('click', submitReview);
+    }
     
     // Modal close
     const modal = document.getElementById('invoice-modal');
