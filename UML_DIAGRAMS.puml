@@ -1,0 +1,540 @@
+@startuml System_Architecture
+!theme plain
+skinparam backgroundColor #F5E6D3
+skinparam component {
+    BackgroundColor #E8DCC6
+    BorderColor #510400
+}
+
+package "Presentation Layer" {
+    component [Web Browser] as Browser
+    component [HTML/CSS/JS] as Frontend
+}
+
+package "Web Server Layer" {
+    component [Express Server] as Server
+    component [REST API] as API
+    component [Authentication Middleware] as AuthMW
+    component [Session Management] as Session
+}
+
+package "Business Logic Layer" {
+    component [Menu Service] as MenuService
+    component [Order Service] as OrderService
+    component [Invoice Service] as InvoiceService
+    component [Payment Service] as PaymentService
+    component [Review Service] as ReviewService
+}
+
+package "Data Access Layer" {
+    component [File System] as FileSystem
+    database "JSON Files" as JSONData {
+        component [menu.json]
+        component [orders.json]
+        component [invoices.json]
+        component [users.json]
+        component [payments.json]
+        component [reviews.json]
+    }
+}
+
+package "Security Layer" {
+    component [JWT Token] as JWT
+    component [Password Hashing] as BCrypt
+}
+
+Browser --> Frontend
+Frontend --> API : HTTP Requests
+API --> AuthMW : Validate Token
+AuthMW --> Session : Check Session
+API --> MenuService
+API --> OrderService
+API --> InvoiceService
+API --> PaymentService
+API --> ReviewService
+
+MenuService --> FileSystem
+OrderService --> FileSystem
+InvoiceService --> FileSystem
+PaymentService --> FileSystem
+ReviewService --> FileSystem
+
+FileSystem --> JSONData
+
+AuthMW --> JWT
+AuthMW --> BCrypt
+
+@enduml
+
+@startuml Class_Diagram
+!theme plain
+skinparam backgroundColor #F5E6D3
+skinparam class {
+    BackgroundColor #E8DCC6
+    BorderColor #510400
+    ArrowColor #510400
+}
+
+package "Backend - Server (server.js)" {
+    class ExpressServer {
+        +app: Express
+        +PORT: number
+        +initializeData(): void
+        +readData(file): Promise<Object>
+        +writeData(file, data): Promise<void>
+        +authenticateToken(req, res, next): void
+        +staffOnly(req, res, next): void
+    }
+
+    class AuthController {
+        +signup(req, res): Promise<void>
+        +login(req, res): Promise<void>
+        +verify(req, res): Promise<void>
+    }
+
+    class MenuController {
+        +getMenu(req, res): Promise<void>
+        +updateMenuItem(req, res): Promise<void>
+    }
+
+    class OrderController {
+        +createOrder(req, res): Promise<void>
+        +getOrders(req, res): Promise<void>
+        +updateOrderStatus(req, res): Promise<void>
+    }
+
+    class InvoiceController {
+        +generateInvoice(req, res): Promise<void>
+        +getInvoices(req, res): Promise<void>
+        +getInvoiceById(req, res): Promise<void>
+    }
+
+    class PaymentController {
+        +processPayment(req, res): Promise<void>
+    }
+
+    class ReviewController {
+        +getReviews(req, res): Promise<void>
+        +createReview(req, res): Promise<void>
+    }
+}
+
+package "Frontend - Client (script.js)" {
+    class AppController {
+        -API_BASE: string
+        -currentUser: User
+        -authToken: string
+        -selectedItems: Array<Item>
+        +checkAuthentication(): Promise<void>
+        +login(email, password): Promise<boolean>
+        +signup(name, email, password): Promise<boolean>
+        +logout(): void
+    }
+
+    class MenuManager {
+        +loadMenu(): Promise<void>
+        +displayMenu(): void
+        +toggleItemAvailability(id): Promise<void>
+    }
+
+    class OrderManager {
+        +loadOrders(): Promise<void>
+        +displayOrders(): void
+        +submitOrder(): Promise<void>
+        +updateOrderStatus(id, status): Promise<void>
+    }
+
+    class InvoiceManager {
+        +loadInvoices(): Promise<void>
+        +displayInvoices(): void
+        +generateInvoice(orderId): Promise<void>
+    }
+
+    class PaymentManager {
+        +showPaymentModal(order): void
+        +processPayment(): Promise<void>
+    }
+
+    class ReviewManager {
+        +loadReviews(): Promise<void>
+        +displayReviews(): void
+        +submitReview(rating, comment): Promise<void>
+    }
+
+    class UITabManager {
+        +initializeTabs(): void
+        +setupUIForUser(): void
+        +switchTab(tabId): void
+    }
+}
+
+package "Data Models" {
+    class User {
+        +id: string
+        +email: string
+        +password: string (hashed)
+        +role: "staff" | "customer"
+        +name: string
+        +createdAt: Date
+    }
+
+    class MenuItem {
+        +id: string
+        +name: string
+        +price: number
+        +category: "coffee" | "snack"
+        +available: boolean
+        +image: string
+    }
+
+    class Order {
+        +id: string
+        +userId: string
+        +customerName: string
+        +items: Array<OrderItem>
+        +total: number
+        +status: "pending" | "preparing" | "completed"
+        +createdAt: Date
+    }
+
+    class OrderItem {
+        +id: string
+        +name: string
+        +price: number
+        +quantity: number
+        +subtotal: number
+    }
+
+    class Invoice {
+        +id: string
+        +orderId: string
+        +invoiceNumber: string
+        +customerName: string
+        +items: Array<OrderItem>
+        +subtotal: number
+        +tax: number
+        +total: number
+        +createdAt: Date
+    }
+
+    class Payment {
+        +id: string
+        +orderId: string
+        +userId: string
+        +amount: number
+        +paymentMethod: string
+        +status: string
+        +createdAt: Date
+    }
+
+    class Review {
+        +id: string
+        +userId: string
+        +userName: string
+        +rating: number (1-5)
+        +comment: string
+        +createdAt: Date
+    }
+}
+
+ExpressServer --> AuthController
+ExpressServer --> MenuController
+ExpressServer --> OrderController
+ExpressServer --> InvoiceController
+ExpressServer --> PaymentController
+ExpressServer --> ReviewController
+
+AppController --> MenuManager
+AppController --> OrderManager
+AppController --> InvoiceManager
+AppController --> PaymentManager
+AppController --> ReviewManager
+AppController --> UITabManager
+
+MenuManager --> MenuItem
+OrderManager --> Order
+InvoiceManager --> Invoice
+PaymentManager --> Payment
+ReviewManager --> Review
+AuthController --> User
+
+Order --> OrderItem
+Invoice --> OrderItem
+
+@enduml
+
+@startuml Flowchart_Order_Processing
+!theme plain
+skinparam backgroundColor #F5E6D3
+skinparam activity {
+    BackgroundColor #E8DCC6
+    BorderColor #510400
+    FontColor #510400
+}
+
+start
+
+:User Opens Browser;
+:Application Loads;
+:Check Authentication Token;
+
+if (Token Valid?) then (No)
+    :Show Login/Signup Buttons;
+    :User Clicks Login/Signup;
+    :User Enters Credentials;
+    :Submit to /api/auth/login or /api/auth/signup;
+    if (Credentials Valid?) then (No)
+        :Show Error Message;
+        stop
+    else (Yes)
+        :Store JWT Token;
+        :Load User Data;
+    endif
+else (Yes)
+    :Verify Token with Server;
+    :Load User Data;
+endif
+
+:Show UI Based on Role;
+
+if (User Role?) then (Staff)
+    :Show Staff Tabs:
+    Menu Management, Orders, Invoices;
+    :User Selects Tab;
+    
+    if (Tab Selected?) then (Menu Management)
+        :Load Menu Items;
+        :Display Menu Grid;
+        :User Toggles Item Availability;
+        :Update Menu via API;
+    else if (Orders)
+        :Load All Orders;
+        :Display Order Cards;
+        :User Updates Order Status;
+        :Update Order via API;
+    else (Invoices)
+        :Load All Invoices;
+        :Display Invoice Cards;
+        :User Generates Invoice;
+        :Create Invoice via API;
+    endif
+else (Customer)
+    :Show Customer Tabs:
+    New Order, Reviews, Photos;
+    :User Selects Tab;
+    
+    if (Tab Selected?) then (New Order)
+        :Load Available Menu Items;
+        :Display Item Grid;
+        :User Selects Items;
+        :Add Items to Cart;
+        :User Sets Quantities;
+        :User Submits Order;
+        :Create Order via API;
+        :Show Payment Modal;
+        :User Selects Payment Method;
+        :User Completes Payment;
+        :Process Payment via API;
+        :Show "Under Construction" Message;
+    else if (Reviews)
+        :Load Reviews;
+        :Display Review Cards;
+        :User Submits Review;
+        :Create Review via API;
+    else (Photos)
+        :Display Photo Gallery;
+    endif
+endif
+
+:Update UI with Results;
+stop
+
+@enduml
+
+@startuml Sequence_Order_Payment
+!theme plain
+skinparam backgroundColor #F5E6D3
+skinparam sequence {
+    ParticipantBackgroundColor #E8DCC6
+    ActorBackgroundColor #E8DCC6
+    LifeLineBorderColor #510400
+    ArrowColor #510400
+}
+
+actor Customer
+participant "Browser\n(Frontend)" as Browser
+participant "Express Server\n(API)" as Server
+participant "Authentication\nMiddleware" as Auth
+participant "Order Service" as OrderService
+participant "Payment Service" as PaymentService
+participant "File System\n(JSON)" as FileSystem
+
+Customer -> Browser: Select Items & Add to Cart
+Customer -> Browser: Click "Proceed to Payment"
+Browser -> Browser: Validate Selected Items
+
+alt User Not Authenticated
+    Browser -> Browser: Show Login Modal
+    Customer -> Browser: Enter Credentials
+    Browser -> Server: POST /api/auth/login\n{email, password}
+    Server -> FileSystem: Read users.json
+    FileSystem --> Server: User Data
+    Server -> Server: Verify Password (bcrypt)
+    Server -> Server: Generate JWT Token
+    Server --> Browser: {token, user}
+    Browser -> Browser: Store Token in localStorage
+end
+
+Browser -> Server: POST /api/orders\nAuthorization: Bearer <token>\n{items, customerName}
+Server -> Auth: authenticateToken()
+Auth -> Auth: Verify JWT Token
+Auth --> Server: User Data
+Server -> FileSystem: Read menu.json
+FileSystem --> Server: Menu Items
+Server -> OrderService: Validate Items & Calculate Total
+OrderService -> OrderService: Check Item Availability
+OrderService --> Server: Order Data
+Server -> FileSystem: Write orders.json
+FileSystem --> Server: Order Created
+Server --> Browser: Order Object\n{id, items, total, status}
+
+Browser -> Browser: Show Payment Modal\nDisplay Order Summary
+
+Customer -> Browser: Select Payment Method\n(Card/PayPal/Cash)
+Customer -> Browser: Click "Complete Payment"
+
+Browser -> Server: POST /api/payments/process\nAuthorization: Bearer <token>\n{orderId, amount, paymentMethod}
+Server -> Auth: authenticateToken()
+Auth --> Server: User Data
+Server -> FileSystem: Read orders.json
+FileSystem --> Server: Order Data
+Server -> PaymentService: Process Payment
+PaymentService -> FileSystem: Write payments.json
+PaymentService -> FileSystem: Update orders.json\n(status: 'paid')
+FileSystem --> PaymentService: Payment Recorded
+PaymentService --> Server: Payment Success
+Server --> Browser: Payment Result\n{success: true, message: "Under Construction"}
+
+Browser -> Browser: Show Success Notification\n"Payment processed!\nCoffee shop under construction"
+
+Browser -> Browser: Clear Cart
+Browser -> Browser: Reload Orders List
+
+@enduml
+
+@startuml Sequence_Staff_Menu_Management
+!theme plain
+skinparam backgroundColor #F5E6D3
+skinparam sequence {
+    ParticipantBackgroundColor #E8DCC6
+    ActorBackgroundColor #E8DCC6
+    LifeLineBorderColor #510400
+    ArrowColor #510400
+}
+
+actor Staff
+participant "Browser\n(Frontend)" as Browser
+participant "Express Server\n(API)" as Server
+participant "Authentication\nMiddleware" as Auth
+participant "Staff Middleware" as StaffAuth
+participant "Menu Service" as MenuService
+participant "File System\n(JSON)" as FileSystem
+
+Staff -> Browser: Click Login
+Browser -> Server: POST /api/auth/login\n{email: "K.Heaven@gmail.com", password}
+Server -> FileSystem: Read users.json
+FileSystem --> Server: Staff User Data
+Server -> Server: Verify Password
+Server -> Server: Generate JWT Token
+Server --> Browser: {token, user: {role: "staff"}}
+Browser -> Browser: Store Token
+Browser -> Browser: Show Staff Tabs
+
+Staff -> Browser: Click "Menu Management" Tab
+Browser -> Server: GET /api/menu
+Server -> FileSystem: Read menu.json
+FileSystem --> Server: Menu Data
+Server --> Browser: {coffee: [...], snacks: [...]}
+Browser -> Browser: Display Menu Items
+
+Staff -> Browser: Click "Toggle Availability" on Item
+Browser -> Server: PUT /api/menu/:id\nAuthorization: Bearer <token>\n{available: true/false}
+Server -> Auth: authenticateToken()
+Auth -> Auth: Verify JWT
+Auth --> Server: User Data
+Server -> StaffAuth: staffOnly()
+StaffAuth -> StaffAuth: Check role === "staff"
+alt Not Staff
+    StaffAuth --> Server: 403 Forbidden
+    Server --> Browser: Error
+else Is Staff
+    StaffAuth --> Server: Proceed
+    Server -> FileSystem: Read menu.json
+    FileSystem --> Server: Current Menu
+    Server -> MenuService: Update Item Availability
+    MenuService -> MenuService: Find Item by ID
+    MenuService -> MenuService: Toggle Available Flag
+    MenuService --> Server: Updated Menu
+    Server -> FileSystem: Write menu.json
+    FileSystem --> Server: Menu Saved
+    Server --> Browser: Updated Menu
+    Browser -> Browser: Refresh Menu Display
+    Browser -> Browser: Show Success Notification
+end
+
+@enduml
+
+@startuml Sequence_Review_Submission
+!theme plain
+skinparam backgroundColor #F5E6D3
+skinparam sequence {
+    ParticipantBackgroundColor #E8DCC6
+    ActorBackgroundColor #E8DCC6
+    LifeLineBorderColor #510400
+    ArrowColor #510400
+}
+
+actor Customer
+participant "Browser\n(Frontend)" as Browser
+participant "Express Server\n(API)" as Server
+participant "Authentication\nMiddleware" as Auth
+participant "Review Service" as ReviewService
+participant "File System\n(JSON)" as FileSystem
+
+Customer -> Browser: Click "Reviews" Tab
+Browser -> Server: GET /api/reviews
+Server -> FileSystem: Read reviews.json
+FileSystem --> Server: Reviews Array
+Server --> Browser: Reviews List
+Browser -> Browser: Display Review Cards
+
+Customer -> Browser: Fill Review Form\nRating: 5, Comment: "Great coffee!"
+Customer -> Browser: Click "Submit Review"
+Browser -> Browser: Validate Form Data
+
+Browser -> Server: POST /api/reviews\nAuthorization: Bearer <token>\n{rating: 5, comment: "Great coffee!"}
+Server -> Auth: authenticateToken()
+Auth -> Auth: Verify JWT Token
+Auth --> Server: User Data
+Server -> Server: Check role !== "staff"
+alt User is Staff
+    Server --> Browser: 403 Error\n"Only customers can leave reviews"
+else User is Customer
+    Server -> FileSystem: Read reviews.json
+    FileSystem --> Server: Existing Reviews
+    Server -> FileSystem: Read users.json
+    FileSystem --> Server: User Data (for name)
+    Server -> ReviewService: Create Review
+    ReviewService -> ReviewService: Validate Rating (1-5)
+    ReviewService -> ReviewService: Create Review Object\n{id, userId, userName, rating, comment, createdAt}
+    ReviewService --> Server: Review Object
+    Server -> FileSystem: Write reviews.json
+    FileSystem --> Server: Review Saved
+    Server --> Browser: Review Object
+    Browser -> Browser: Show Success Notification
+    Browser -> Browser: Clear Review Form
+    Browser -> Browser: Reload Reviews List
+end
+
+@enduml
+
